@@ -14,3 +14,14 @@ select ProductID,
 From products
  where UnitsInStock is not null
  GROUP BY  ProductID
+
+
+ 3.
+select p.ProductID, P.ProductName,P.SupplierID,s.CompanyName, 
+case when s.Phone is NULL then ' ' 
+else s.Phone end as 'Phone' ,
+MIN(100-p.UnitsInStock+p.UnitsOnOrder) as 'to order'
+from products as p join suppliers as s
+on p.ProductID = s.SupplierID
+where  p.UnitsInStock+p.UnitsOnOrder < 10
+group by p.ProductID
