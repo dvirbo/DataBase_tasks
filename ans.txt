@@ -1,0 +1,16 @@
+1.the ans writhen on my ipad..
+
+2.
+/*
+need to fix..
+*/
+select ProductID,
+	productName,
+	sum(UnitsInStock) as totalQuantity,
+	sum(UnitsInStock*UnitPrice) as totalPrice, 
+	avg(QuantityPerUnit*UnitPrice) as WeighedAvgPrice,
+    avg(UnitPrice) as AvgPrice,
+    UnitPrice as CurrentPrice
+From products
+ where UnitsInStock is not null
+ GROUP BY  ProductID
