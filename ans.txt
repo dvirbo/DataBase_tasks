@@ -41,12 +41,13 @@ group by e.EmployeeID
 
 5.
 
-select p.ProductName, s.CompanyName, YEAR(o.OrderDate) AS OrderYear 
-
-/*
-stuck on the quater part..
-*/
-
+select p.ProductName, s.CompanyName,
+ YEAR(o.OrderDate) AS OrderYear,
+o.OrderDate, quarter(o.OrderDate) as testing, 
+if(quarter(o.OrderDate) = 1 , od.UnitPrice*od.Quantity*(1-od.Discount) ,0) as Qrt1,
+if(quarter(o.OrderDate) = 2 , od.UnitPrice*od.Quantity*(1-od.Discount) ,0) as Qrt2,
+if(quarter(o.OrderDate) = 3 , od.UnitPrice*od.Quantity*(1-od.Discount) ,0) as Qrt3,
+if(quarter(o.OrderDate) = 4 , od.UnitPrice*od.Quantity*(1-od.Discount) ,0) as Qrt4
 from  orders as o 
 join `order details` as od 
 on o.OrderID = od.OrderID
@@ -54,4 +55,8 @@ join products as p
 on p.ProductID = od.ProductID
 join suppliers as s
 on p.SupplierID = s.SupplierID
-ORDER BY p.ProductName ASC ,s.CompanyName ASC;
+ORDER BY p.ProductName ,s.CompanyName;
+
+
+
+
