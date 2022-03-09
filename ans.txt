@@ -38,3 +38,20 @@ from employees as e join orders as o
 on e.EmployeeID = o.EmployeeID 
 where o.OrderDate = '1998-05-08'
 group by e.EmployeeID
+
+5.
+
+select p.ProductName, s.CompanyName, YEAR(o.OrderDate) AS OrderYear 
+
+/*
+stuck on the quater part..
+*/
+
+from  orders as o 
+join `order details` as od 
+on o.OrderID = od.OrderID
+join products as p 
+on p.ProductID = od.ProductID
+join suppliers as s
+on p.SupplierID = s.SupplierID
+ORDER BY p.ProductName ASC ,s.CompanyName ASC;
