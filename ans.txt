@@ -27,20 +27,15 @@ where  p.UnitsInStock+p.UnitsOnOrder < 10
 group by p.ProductID
 
 4.
-/*
-:מה זה אומר
- שבוע אחרי התאריך הגבוה ביותר שבו עבד
-בחופף לעובד מספר 8 
-*/
-select e.EmployeeID, e.FirstName,e.lastName, e.HomePhone, 
-date_add('1998-05-08', INTERVAL 7 DAY )  as 'insulation ends at.. '
+select e.EmployeeID, e.FirstName, e.lastName, e.HomePhone,
+date_add(max( o.OrderDate), INTERVAL 7 DAY )  as 'insulation ends at.. '
 from employees as e join orders as o
 on e.EmployeeID = o.EmployeeID 
-where o.OrderDate = '1998-05-08'
+where o.OrderDate between '1998-05-01' and '1998-05-08' 
 group by e.EmployeeID
 
-5.
 
+5.
 select p.ProductName, s.CompanyName,
  YEAR(o.OrderDate) AS OrderYear,
 o.OrderDate, quarter(o.OrderDate) as testing, 
