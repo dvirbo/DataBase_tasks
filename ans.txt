@@ -19,14 +19,23 @@ GROUP BY ProductID
 
 
  3.
-select p.ProductID, P.ProductName,P.SupplierID,s.CompanyName, 
-case when s.Phone is NULL then ' ' 
-else s.Phone end as 'Phone' ,
-MIN(100-p.UnitsInStock+p.UnitsOnOrder) as 'to order'
-from products as p join suppliers as s
-on p.ProductID = s.SupplierID
-where  p.UnitsInStock+p.UnitsOnOrder < 10
-group by p.ProductID
+SELECT 
+    p.ProductID,
+    P.ProductName,
+    P.SupplierID,
+    s.CompanyName,
+    CASE
+        WHEN s.Phone IS NULL THEN ' '
+        ELSE s.Phone
+    END AS 'Phone',
+    MIN(100 - p.UnitsInStock + p.UnitsOnOrder) AS 'to order'
+FROM
+    products AS p
+        JOIN
+    suppliers AS s ON p.ProductID = s.SupplierID
+WHERE
+    p.UnitsInStock + p.UnitsOnOrder < 10
+GROUP BY p.ProductID
 
 4.
 SELECT 
