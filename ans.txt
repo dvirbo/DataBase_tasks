@@ -1,19 +1,21 @@
 1.the ans writhen on my ipad..
 
 2.
-/*
-need to fix..
-*/
-select ProductID,
-	productName,
-	sum(UnitsInStock) as totalQuantity,
-	sum(UnitsInStock*UnitPrice) as totalPrice, 
-	avg(QuantityPerUnit*UnitPrice) as WeighedAvgPrice,
-    avg(UnitPrice) as AvgPrice,
-    UnitPrice as CurrentPrice
-From products
- where UnitsInStock is not null
- GROUP BY  ProductID
+
+SELECT 
+    ProductID,
+    productName,
+    SUM(UnitsInStock + UnitsOnOrder) AS totalQuantity,
+    CONCAT('$',
+            (UnitsInStock + UnitsOnOrder) * UnitPrice) AS totalPrice,
+    CONCAT('$', AVG(QuantityPerUnit * UnitPrice)) AS WeighedAvgPrice,
+    CONCAT('$', AVG(QuantityPerUnit)) AS AvgPrice,
+    CONCAT('$', UnitPrice) AS CurrentPrice
+FROM
+    products
+WHERE
+    UnitsInStock IS NOT NULL
+GROUP BY ProductID
 
 
  3.
@@ -27,30 +29,54 @@ where  p.UnitsInStock+p.UnitsOnOrder < 10
 group by p.ProductID
 
 4.
-select e.EmployeeID, e.FirstName, e.lastName, e.HomePhone,
-date_add(max( o.OrderDate), INTERVAL 7 DAY )  as 'insulation ends at.. '
-from employees as e join orders as o
-on e.EmployeeID = o.EmployeeID 
-where o.OrderDate between '1998-05-01' and '1998-05-08' 
-group by e.EmployeeID
+SELECT 
+    p.ProductID,
+    P.ProductName,
+    P.SupplierID,
+    s.CompanyName,
+    CASE
+        WHEN s.Phone IS NULL THEN ' '
+        ELSE s.Phone
+    END AS 'Phone',
+    MIN(100 - p.UnitsInStock + p.UnitsOnOrder) AS 'to order'
+FROM
+    products AS p
+        JOIN
+    suppliers AS s ON p.ProductID = s.SupplierID
+WHERE
+    p.UnitsInStock + p.UnitsOnOrder < 10
+GROUP BY p.ProductID
 
 
 5.
-select p.ProductName, s.CompanyName,
- YEAR(o.OrderDate) AS OrderYear,
-o.OrderDate, quarter(o.OrderDate) as testing, 
-if(quarter(o.OrderDate) = 1 , od.UnitPrice*od.Quantity*(1-od.Discount) ,0) as Qrt1,
-if(quarter(o.OrderDate) = 2 , od.UnitPrice*od.Quantity*(1-od.Discount) ,0) as Qrt2,
-if(quarter(o.OrderDate) = 3 , od.UnitPrice*od.Quantity*(1-od.Discount) ,0) as Qrt3,
-if(quarter(o.OrderDate) = 4 , od.UnitPrice*od.Quantity*(1-od.Discount) ,0) as Qrt4
-from  orders as o 
-join `order details` as od 
-on o.OrderID = od.OrderID
-join products as p 
-on p.ProductID = od.ProductID
-join suppliers as s
-on p.SupplierID = s.SupplierID
-ORDER BY p.ProductName ,s.CompanyName;
+SELECT 
+    p.ProductName,
+    s.CompanyName,
+    YEAR(o.OrderDate) AS OrderYear,
+    o.OrderDate,
+    QUARTER(o.OrderDate) AS testing,
+    IF(QUARTER(o.OrderDate) = 1,
+        od.UnitPrice * od.Quantity * (1 - od.Discount),
+        0) AS Qrt1,
+    IF(QUARTER(o.OrderDate) = 2,
+        od.UnitPrice * od.Quantity * (1 - od.Discount),
+        0) AS Qrt2,
+    IF(QUARTER(o.OrderDate) = 3,
+        od.UnitPrice * od.Quantity * (1 - od.Discount),
+        0) AS Qrt3,
+    IF(QUARTER(o.OrderDate) = 4,
+        od.UnitPrice * od.Quantity * (1 - od.Discount),
+        0) AS Qrt4
+FROM
+    orders AS o
+        JOIN
+    `order details` AS od ON o.OrderID = od.OrderID
+        JOIN
+    products AS p ON p.ProductID = od.ProductID
+        JOIN
+    suppliers AS s ON p.SupplierID = s.SupplierID
+ORDER BY p.ProductName , s.CompanyName;
+
 
 
 
