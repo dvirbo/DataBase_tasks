@@ -3,19 +3,22 @@
 2.
 
 SELECT 
-    ProductID,
-    productName,
-    SUM(UnitsInStock + UnitsOnOrder) AS totalQuantity,
-    CONCAT('$',
-            (UnitsInStock + UnitsOnOrder) * UnitPrice) AS totalPrice,
-    CONCAT('$', AVG(QuantityPerUnit * UnitPrice)) AS WeighedAvgPrice,
-    CONCAT('$', AVG(QuantityPerUnit)) AS AvgPrice,
-    CONCAT('$', UnitPrice) AS CurrentPrice
+    p.ProductID,
+    p.productName,
+    SUM(od.Quantity) AS totalQuantity, -- ok
+    -- SELECT CAST(ROUND(Column_Name, 2)
+    CONCAT('$', SUM(od.UnitPrice * od.Quantity))  AS totalPrice, -- OK
+    CONCAT('$', sum(od.UnitPrice)/od.Quantity) AS WeighedAvgPrice, --
+    CONCAT('$', AVG(od.UnitPrice)) AS AvgPrice, -- 
+    CONCAT('$', p.UnitPrice) AS CurrentPrice -- ok
 FROM
-    products
+    products AS p
+        JOIN
+    `order details` AS od ON p.ProductID = od.ProductID
 WHERE
-    UnitsInStock IS NOT NULL
-GROUP BY ProductID
+    p.UnitsInStock IS NOT NULL
+GROUP BY p.ProductID
+
 
 
  3.
