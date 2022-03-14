@@ -35,59 +35,56 @@ SELECT
 FROM
     products AS p
         JOIN
-    suppliers AS s ON p.ProductID = s.SupplierID
+    suppliers AS s ON p.SupplierID = s.SupplierID
 WHERE
     p.UnitsInStock + p.UnitsOnOrder < 10
 GROUP BY p.ProductID
 
 4.
 SELECT 
-    p.ProductID,
-    P.ProductName,
-    P.SupplierID,
-    s.CompanyName,
-    CASE
-        WHEN s.Phone IS NULL THEN ' '
-        ELSE s.Phone
-    END AS 'Phone',
-    MIN(100 - p.UnitsInStock + p.UnitsOnOrder) AS 'to order'
+    e.EmployeeID,
+    e.FirstName,
+    e.lastName,
+    e.HomePhone,
+    DATE_ADD(MAX(o.OrderDate),
+        INTERVAL 7 DAY) AS 'insulation ends at.. '
 FROM
-    products AS p
+    employees AS e
         JOIN
-    suppliers AS s ON p.ProductID = s.SupplierID
+    orders AS o ON e.EmployeeID = o.EmployeeID
 WHERE
-    p.UnitsInStock + p.UnitsOnOrder < 10
-GROUP BY p.ProductID
+    o.OrderDate BETWEEN '1998-05-02' AND '1998-05-08'
+GROUP BY e.EmployeeID
 
 
 5.
 SELECT 
     p.ProductName,
-    s.CompanyName,
+    c.CompanyName,
     YEAR(o.OrderDate) AS OrderYear,
-    o.OrderDate,
-    QUARTER(o.OrderDate) AS testing,
     IF(QUARTER(o.OrderDate) = 1,
-        od.UnitPrice * od.Quantity * (1 - od.Discount),
+        ROUND(od.UnitPrice * od.Quantity * (1 - od.Discount)),
         0) AS Qrt1,
     IF(QUARTER(o.OrderDate) = 2,
-        od.UnitPrice * od.Quantity * (1 - od.Discount),
+        ROUND(od.UnitPrice * od.Quantity * (1 - od.Discount)),
         0) AS Qrt2,
     IF(QUARTER(o.OrderDate) = 3,
-        od.UnitPrice * od.Quantity * (1 - od.Discount),
+        ROUND(od.UnitPrice * od.Quantity * (1 - od.Discount)),
         0) AS Qrt3,
     IF(QUARTER(o.OrderDate) = 4,
-        od.UnitPrice * od.Quantity * (1 - od.Discount),
+        ROUND(od.UnitPrice * od.Quantity * (1 - od.Discount)),
         0) AS Qrt4
 FROM
-    orders AS o
+    customers AS c
+        JOIN
+    orders AS o ON c.CustomerID = o.CustomerID
         JOIN
     `order details` AS od ON o.OrderID = od.OrderID
         JOIN
     products AS p ON p.ProductID = od.ProductID
         JOIN
     suppliers AS s ON p.SupplierID = s.SupplierID
-ORDER BY p.ProductName , s.CompanyName;
+ORDER BY p.ProductName , c.CompanyName;
 
 
 
