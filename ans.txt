@@ -1,5 +1,5 @@
-1.the ans writhen on my ipad..
-
+1.
+The query will return a table showing the information about all the companies and their phone number that the product they ordered has not yet arrived and has less than 7 days left until the estimated arrival date: if there are a few days left then the 'days left' column will list how many days are left until the arrival time. Otherwise (arrival time has passed), a 'pass' will be listed.
 2.
 
 SELECT 
