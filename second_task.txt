@@ -26,3 +26,19 @@ END
 
 1.b:
 java file..
+
+
+2.
+
+DELIMITER //
+CREATE TRIGGER delEmp
+AFTER DELETE ON employees
+ FOR EACH ROW  
+  
+	delete from employeeterritories
+    where EmployeeID = old.EmployeeID; 
+    end//
+DELIMITER ;
+
+								 
+
