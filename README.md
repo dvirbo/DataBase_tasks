@@ -1,2 +1,2 @@
-# DataBase_task-1
-First task on  Databases course in Ariel university
+# DataBase_tasks
+this repo manage our tasks in DATABASE course in ariel university 

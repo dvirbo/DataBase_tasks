@@ -1,0 +1,27 @@
+1.a:
+
+CREATE PROCEDURE `myPrecuder` (IN cusID INT, OUT cudID INT, OUT pl text, OUT AMOUNT REAL)
+BEGIN
+SELECT 
+    OrderID,
+    (CASE
+        WHEN ((UnitPrice * Quantity) > (AVG(UnitPrice) * Quantity)) THEN 'Profit'
+        WHEN ((UnitPrice * Quantity) < (AVG(UnitPrice) * Quantity)) THEN 'Loss'
+        WHEN ((UnitPrice * Quantity) = (AVG(UnitPrice) * Quantity)) THEN 'equivalent'
+    END) AS 'Profit/Loss',
+    (CASE
+        WHEN ((UnitPrice * Quantity) > (AVG(UnitPrice) * Quantity)) THEN (UnitPrice * Quantity) - (AVG(UnitPrice) * Quantity)
+        WHEN ((UnitPrice * Quantity) < (AVG(UnitPrice) * Quantity)) THEN (AVG(UnitPrice) * Quantity) - (UnitPrice * Quantity)
+    END) AS 'Amount'
+FROM
+    orders AS o
+        JOIN
+    `order details` AS od ON o.OrderID = od.OrderID
+WHERE
+    o.CustomerID = cusID
+ORDER BY OrderID; 
+
+END
+
+1.b:
+java file..
