@@ -1,6 +1,6 @@
 1.a:
 
-CREATE PROCEDURE `myPrecuder` (IN cusID INT, OUT cudID INT, OUT pl text, OUT AMOUNT REAL)
+CREATE PROCEDURE `myPrecuder` (IN cusID INT)
 BEGIN
 SELECT 
     OrderID,
@@ -22,6 +22,7 @@ WHERE
 ORDER BY OrderID; 
 
 END
+
 
 1.b:
 java file..
