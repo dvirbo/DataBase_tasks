@@ -25,10 +25,11 @@ END
 
 
 1.b:
-java file..
+
+java file 1b.java
 
 
-2.
+2:
 
 DELIMITER //
 CREATE TRIGGER delEmp
@@ -41,4 +42,30 @@ AFTER DELETE ON employees
 DELIMITER ;
 
 								 
+3.a:
 
+SELECT OrderId, RequiredDate 
+FROM orders
+WHERE shippedDate = null AND RequiredDate < NOW
+
+3.b:
+
+The purpose of the query is to get all the OrderId that don't have 
+shippedDate and the estimated time of arrival has not yet passed.
+
+
+4.a:
+
+candidate keys:
+                {A,B}
+                {A,C}
+                {C,D}
+                {B,D}
+
+4.b:
+
+The normal form is NF3.
+becasue we don't have NON-PRIME (NF3) and D isn't candidiate (thats why is only NF3 and not NF3.5).
+
+
+### done ###
