@@ -1,0 +1,92 @@
+mongoDB:
+
+1 a:
+    db.colliection.insert({
+        "Name": "__",
+        "authors": "__",
+        "BookPublishing": "__",
+        "publishYear": "__",
+        "book": "__"
+    })
+
+1 b:
+
+    db.colliection.mapReduce(
+
+        // mapper ::    asume that each word has index ?
+        mapFunction() {
+            for (var idx = 0; idx < this.book.length; idx++)
+                var key = this.book[idx];
+            var value = {
+                this.items[idx].length(),
+                count: 1
+            };
+            emit(key, value);
+        };
+
+        // reducer
+        reduceFunction(, ) {
+
+
+        }
+
+    )
+
+
+
+
+Neo4j:
+
+MATCH (d:person{name:'Dani'})-[:publish]->(p:post) WITH COLECT(p) AS Dani_post
+MATCH (d:person{name:'Dani'})-[:friend*1..3]->(fri:person) WITH COLECT(fri) AS Dani_frinds
+MATCH (f:Dani_frinds) WHERE f > d.age AND ALL (X IN Dani_post WHERE (f)-[:likes]->(X)
+RETURN f
+
+
+other ans (don't know if its true..):
+{
+MATCH (d:person{name:'Dani'})-[:friend*1..3]->(p:person)-[:likes]->(Dani_post) ??
+WHERE p >d.age
+}
+
+
+
+
+ X-path:
+
+ for $x in /country
+    let $citizen := sum(/country/city/num)
+    where citizen > 1000000
+    return $x/name
+
+
+
+SPARQL & RDF:
+
+RDF table in the  word file..
+
+/* 
+ id its the grands
+ pid its the parents
+ 111 its Reuven
+*/
+
+SELECT ?id WHERE{
+?pid Father_id  111
+?id  Father_id ?pid
+?id   Age    25
+} 
+
+
+ TF-IDF:
+
+Today is Thursday.
+What a pleasant day today!
+Today is Jonathan's birthday.
+Very sunny day outside.  
+
+
+
+
+
+
