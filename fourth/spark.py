@@ -5,14 +5,21 @@ from pyspark.sql.functions import col, expr
 
 findspark.init()
 sc = SparkContext("local[*]", "Simple App")
-
 sqlContext = SQLContext(sc)
-# .withColumn("year", expr("2022- num"))
+my_year = 2022
+
 df = sqlContext.read.json("books.json", multiLine=True)
-# df.filter(col("author").startswith("F")).select("title", "author", "year").show() # q1
+ndf = df.filter(col("author").startswith("F")).select("title", "author", "year").show()  # q1
+'''
+rdd = ndf.rdd
+sub = rdd.reduce(lambda row: my_year - row.year).collect()
+finish = sqlContext.createDataFrame(sub).show()
+'''
 
 
-df.filter(col("language").startswith("English")).select("pages", "author") # q2
+
+''' # q2
+df.filter(col("language").startswith("English")).select("pages", "author") 
 rdd = df.rdd
 calc_amount = rdd.map(lambda row: (row.author, row.pages)) \
     .reduceByKey(lambda a, b: a + b) \
@@ -20,3 +27,5 @@ calc_amount = rdd.map(lambda row: (row.author, row.pages)) \
 
 for author, sum_amount in calc_amount:
     print('%s : %s' % (author, sum_amount))
+
+'''
